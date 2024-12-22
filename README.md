@@ -1,8 +1,8 @@
 # Flight Permissions Plugin
-[![Latest Stable Version](http://poser.pugx.org/flightphp/permissions/v)](https://packagist.org/packages/flightphp/permissions)
+[![Latest Stable Version](https://poser.pugx.org/flightphp/permissions/v)](https://packagist.org/packages/flightphp/permissions)
 [![License](https://poser.pugx.org/flightphp/permissions/license)](https://packagist.org/packages/flightphp/permissions)
-[![PHP Version Require](http://poser.pugx.org/flightphp/permissions/require/php)](https://packagist.org/packages/flightphp/permissions)
-[![Dependencies](http://poser.pugx.org/flightphp/permissions/dependents)](https://packagist.org/packages/flightphp/permissions)
+[![PHP Version Require](https://poser.pugx.org/flightphp/permissions/require/php)](https://packagist.org/packages/flightphp/permissions)
+[![Dependencies](https://poser.pugx.org/flightphp/permissions/dependents)](https://packagist.org/packages/flightphp/permissions)
 
 Permissions are an important part to any application. Even in a RESTful API you'll need to check that the API key has permission to perform the action requested. In some cases it makes sense to handle authentication in a middleware, but in other cases, it's more helpful to have a standard set of permissions. 
 
