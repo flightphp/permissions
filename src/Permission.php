@@ -9,8 +9,7 @@ use Flight;
 use flight\Engine;
 use Wruczek\PhpFileCache\PhpFileCache;
 
-class Permission
-{
+class Permission {
     /** @var array */
     protected $rules = [];
 
@@ -32,8 +31,7 @@ class Permission
      * @param string $currentRole
      * @param Engine $f3
      */
-    public function __construct(string $currentRole = '', Engine $app = null, $Cache = null)
-    {
+    public function __construct(string $currentRole = '', ?Engine $app = null, $Cache = null) {
         $this->currentRole = $currentRole;
         $this->app = $app === null ? Flight::app() : $app;
         $this->Cache = $Cache;
@@ -45,8 +43,7 @@ class Permission
      * @param string $currentRole the current role of the logged in user
      * @return void
      */
-    public function setCurrentRole(string $currentRole)
-    {
+    public function setCurrentRole(string $currentRole) {
         $this->currentRole = $currentRole;
     }
 
@@ -55,8 +52,7 @@ class Permission
      *
      * @return string
      */
-    public function getCurrentRole(): string
-    {
+    public function getCurrentRole(): string {
         return $this->currentRole;
     }
 
@@ -65,8 +61,7 @@ class Permission
      *
      * @return array
      */
-    public function getRules(): array
-    {
+    public function getRules(): array {
         return $this->rules;
     }
 
@@ -87,8 +82,7 @@ class Permission
      * @param bool            $overwrite if true, will overwrite any existing rule with the same name
      * @return void
      */
-    public function defineRule(string $rule, $callableOrClassString, bool $overwrite = false)
-    {
+    public function defineRule(string $rule, $callableOrClassString, bool $overwrite = false) {
         if ($overwrite === false && isset($this->rules[$rule]) === true) {
             throw new \Exception('Rule already defined: ' . $rule);
         }
@@ -101,8 +95,7 @@ class Permission
      * @param string $className the name of the class to define rules from
      * @return void
      */
-    public function defineRulesFromClassMethods(string $className, int $ttl = 0): void
-    {
+    public function defineRulesFromClassMethods(string $className, int $ttl = 0): void {
 
         $useCache = false;
         if ($this->Cache !== null && $ttl > 0) {
@@ -148,12 +141,11 @@ class Permission
      * @param mixed $additionalArgs any additional arguments to pass to the callback or method.
      * @return bool
      */
-    public function can(string $permission, ...$additionalArgs): bool
-    {
+    public function can(string $permission, ...$additionalArgs): bool {
         $allowed = false;
         $action = '';
         if (strpos($permission, '.') !== false) {
-            [ $permission, $action ] = explode('.', $permission);
+            [$permission, $action] = explode('.', $permission);
         }
 
         $permissionsRaw = $this->rules[$permission] ?? null;
@@ -169,7 +161,7 @@ class Permission
             if (is_string($permissionsRaw) === true) {
                 $permissionsRaw = explode('->', $permissionsRaw);
             }
-            [ $className, $methodName ] = $permissionsRaw;
+            [$className, $methodName] = $permissionsRaw;
             if (isset($this->localClassCache[$className]) === false) {
                 $class = new $className($this->app);
                 $this->localClassCache[$className] = $class;
@@ -195,8 +187,7 @@ class Permission
      * @param mixed $additionalArgs any additional arguments to pass to the callback or method.
      * @return boolean
      */
-    public function has(string $permission, ...$additionalArgs): bool
-    {
+    public function has(string $permission, ...$additionalArgs): bool {
         return $this->can($permission, ...$additionalArgs);
     }
 
@@ -206,8 +197,7 @@ class Permission
      * @param string $role [description]
      * @return boolean
      */
-    public function is(string $role): bool
-    {
+    public function is(string $role): bool {
         return $this->currentRole === $role;
     }
 }
