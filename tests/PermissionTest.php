@@ -3,8 +3,8 @@
 namespace flight\tests;
 
 use Exception;
+use flight\Cache;
 use flight\Permission;
-use Wruczek\PhpFileCache\PhpFileCache;
 
 class PermissionTest extends \PHPUnit\Framework\TestCase
 {
@@ -27,7 +27,7 @@ class PermissionTest extends \PHPUnit\Framework\TestCase
     {
         $permission = new Permission('admin');
         $permission->defineRule('createOrder', 'Some_Permissions_Class->createOrder');
-        $this->assertSame([ 'createOrder' => 'Some_Permissions_Class->createOrder' ], $permission->getRules());
+        $this->assertSame(['createOrder' => 'Some_Permissions_Class->createOrder'], $permission->getRules());
     }
 
     public function testDefineDuplicateRule()
@@ -62,7 +62,7 @@ class PermissionTest extends \PHPUnit\Framework\TestCase
 
     public function testDefineRulesFromClassMethodsWithCache()
     {
-        $PhpFileCache = new PhpFileCache(__DIR__, 'my_test');
+        $PhpFileCache = new Cache(__DIR__, 'my_test');
         $permission = new Permission('public', null, $PhpFileCache);
         $permission->defineRulesFromClassMethods(FakePermissionsClass::class, 60);
         $this->assertTrue($permission->can('order.create', 1, 1));
@@ -77,7 +77,7 @@ class PermissionTest extends \PHPUnit\Framework\TestCase
 
     public function testDefineRulesFromClassMethodsWithCacheTouchCache()
     {
-        $PhpFileCache = new PhpFileCache(__DIR__, 'my_test');
+        $PhpFileCache = new Cache(__DIR__, 'my_test');
         $permission = new Permission('public', null, $PhpFileCache);
         $permission->defineRulesFromClassMethods(FakePermissionsClass::class, 60);
         // Make sure it works
