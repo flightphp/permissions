@@ -7,9 +7,9 @@ namespace flight;
 use Exception;
 use Flight;
 use flight\Engine;
-use Wruczek\PhpFileCache\PhpFileCache;
 
-class Permission {
+class Permission
+{
     /** @var array */
     protected $rules = [];
 
@@ -31,7 +31,8 @@ class Permission {
      * @param string $currentRole
      * @param Engine $f3
      */
-    public function __construct(string $currentRole = '', ?Engine $app = null, $Cache = null) {
+    public function __construct(string $currentRole = '', ?Engine $app = null, $Cache = null)
+    {
         $this->currentRole = $currentRole;
         $this->app = $app === null ? Flight::app() : $app;
         $this->Cache = $Cache;
@@ -43,7 +44,8 @@ class Permission {
      * @param string $currentRole the current role of the logged in user
      * @return void
      */
-    public function setCurrentRole(string $currentRole) {
+    public function setCurrentRole(string $currentRole)
+    {
         $this->currentRole = $currentRole;
     }
 
@@ -52,7 +54,8 @@ class Permission {
      *
      * @return string
      */
-    public function getCurrentRole(): string {
+    public function getCurrentRole(): string
+    {
         return $this->currentRole;
     }
 
@@ -61,7 +64,8 @@ class Permission {
      *
      * @return array
      */
-    public function getRules(): array {
+    public function getRules(): array
+    {
         return $this->rules;
     }
 
@@ -82,7 +86,8 @@ class Permission {
      * @param bool            $overwrite if true, will overwrite any existing rule with the same name
      * @return void
      */
-    public function defineRule(string $rule, $callableOrClassString, bool $overwrite = false) {
+    public function defineRule(string $rule, $callableOrClassString, bool $overwrite = false)
+    {
         if ($overwrite === false && isset($this->rules[$rule]) === true) {
             throw new \Exception('Rule already defined: ' . $rule);
         }
@@ -95,15 +100,16 @@ class Permission {
      * @param string $className the name of the class to define rules from
      * @return void
      */
-    public function defineRulesFromClassMethods(string $className, int $ttl = 0): void {
+    public function defineRulesFromClassMethods(string $className, int $ttl = 0): void
+    {
 
         $useCache = false;
         if ($this->Cache !== null && $ttl > 0) {
             $useCache = true;
             $Cache = $this->Cache;
             $cacheKey = 'flight_permissions_class_methods_' . $className;
-            if (is_a($Cache, PhpFileCache::class) === true) {
-                /** @var PhpFileCache $Cache */
+            if (is_a($Cache, Cache::class) === true) {
+                /** @var Cache $Cache */
                 $isCached = $Cache->isCached($cacheKey);
                 if ($isCached === true) {
                     $this->rules = $Cache->retrieve($cacheKey);
@@ -124,8 +130,8 @@ class Permission {
         }
 
         if ($useCache === true) {
-            if (is_a($Cache, PhpFileCache::class) === true) {
-                /** @var PhpFileCache $Cache */
+            if (is_a($Cache, Cache::class) === true) {
+                /** @var Cache $Cache */
                 $Cache->store($cacheKey, $classRules, $ttl);
             }
         }
@@ -141,7 +147,8 @@ class Permission {
      * @param mixed $additionalArgs any additional arguments to pass to the callback or method.
      * @return bool
      */
-    public function can(string $permission, ...$additionalArgs): bool {
+    public function can(string $permission, ...$additionalArgs): bool
+    {
         $allowed = false;
         $action = '';
         if (strpos($permission, '.') !== false) {
@@ -187,7 +194,8 @@ class Permission {
      * @param mixed $additionalArgs any additional arguments to pass to the callback or method.
      * @return boolean
      */
-    public function has(string $permission, ...$additionalArgs): bool {
+    public function has(string $permission, ...$additionalArgs): bool
+    {
         return $this->can($permission, ...$additionalArgs);
     }
 
@@ -197,7 +205,8 @@ class Permission {
      * @param string $role [description]
      * @return boolean
      */
-    public function is(string $role): bool {
+    public function is(string $role): bool
+    {
         return $this->currentRole === $role;
     }
 }
